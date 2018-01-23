@@ -36,8 +36,19 @@ class FlickrTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath), let tag = cell.textLabel?.text {
             networkManager.queryImages(with: tag, completionHandler: { (jsonData) in
-                print(jsonData)
+                if let photos = jsonData["photo"] as? [[String: AnyObject]] {
+                    let flickrImages = photos.map{Photo.init(data: $0)}
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "DetailSegue", sender: flickrImages)
+                    }
+                }
             })
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dvc = segue.destination as? ImageCollectionViewController, let flickrImages = sender as? [Photo] {
+            dvc.flickrImages = flickrImages
         }
     }
 }

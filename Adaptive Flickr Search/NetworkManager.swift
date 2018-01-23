@@ -34,14 +34,13 @@ class NetworkManager: NSObject {
             }
             
             do {
-                if let photoData = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject] {
-                    print(photoData.description)
-                    completionHandler(photoData)
+                if let photoData = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject], let photoArray = photoData["photos"] as? [String:AnyObject] {
+                    completionHandler(photoArray)
                 }
             } catch {
                 print(error.localizedDescription)
             }
         })
-//        dataTask.resume()
+        dataTask.resume()
     }
 }

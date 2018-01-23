@@ -51,14 +51,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UISplitViewControllerDelegate {
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        return false
+        print(primaryViewController)
+        print(secondaryViewController)
+        if secondaryViewController is ImageCollectionViewController || secondaryViewController is ImageDetailViewController{
+            return false
+        }
+        
+        return true
     }
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         
         if let navController = primaryViewController as? UINavigationController {
-            return navController
+            return navController.topViewController
         }
-        
+
         return primaryViewController.storyboard?.instantiateViewController(withIdentifier: "NoCategorySelected")
     }
 }
+

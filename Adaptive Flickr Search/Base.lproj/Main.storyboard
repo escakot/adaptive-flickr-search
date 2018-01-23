@@ -36,9 +36,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="tDg-Jh-EbX" kind="show" identifier="DetailSegue" id="PCl-SQ-Jmr"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -49,15 +46,18 @@
                     <navigationItem key="navigationItem" title="Flickr Categories" id="0Rb-NW-nEg">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="O1u-Z3-4IP"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="tDg-Jh-EbX" kind="show" identifier="DetailSegue" id="rvf-Vq-vEd"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MHj-WX-eUg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1303" y="-13"/>
+            <point key="canvasLocation" x="1255" y="-17"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--Image Collection View Controller-->
         <scene sceneID="fMM-M2-put">
             <objects>
-                <collectionViewController id="tDg-Jh-EbX" sceneMemberID="viewController">
+                <collectionViewController id="tDg-Jh-EbX" customClass="ImageCollectionViewController" customModule="Adaptive_Flickr_Search" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="OET-Ws-gVi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -100,7 +100,7 @@
                                 </constraints>
                                 <connections>
                                     <outlet property="imageView" destination="Kxq-DL-adR" id="Ob9-4h-f2L"/>
-                                    <outlet property="title" destination="4dW-Zv-w8I" id="OpC-iI-YVp"/>
+                                    <outlet property="titleLabel" destination="4dW-Zv-w8I" id="ObD-i0-Fop"/>
                                     <segue destination="e5z-t3-UDQ" kind="show" id="K6L-K4-T4Z"/>
                                 </connections>
                             </collectionViewCell>
@@ -115,10 +115,10 @@
             </objects>
             <point key="canvasLocation" x="2024.6376811594205" y="-11.413043478260871"/>
         </scene>
-        <!--View Controller-->
+        <!--Image Detail View Controller-->
         <scene sceneID="b1W-N8-xCm">
             <objects>
-                <viewController id="e5z-t3-UDQ" sceneMemberID="viewController">
+                <viewController id="e5z-t3-UDQ" customClass="ImageDetailViewController" customModule="Adaptive_Flickr_Search" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n5X-dm-6Eg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -127,10 +127,10 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="652"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="gJu-Ir-BCg">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="611.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="608"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0A-yD-vXF">
-                                        <rect key="frame" x="183" y="631.66666666666663" width="48" height="20.333333333333371"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0A-yD-vXF">
+                                        <rect key="frame" x="183" y="628" width="48" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -147,6 +147,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ojm-LX-8DS"/>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="gJu-Ir-BCg" id="6yZ-yC-2To"/>
+                        <outlet property="titleLabel" destination="r0A-yD-vXF" id="DMt-w0-MSV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F2i-nG-P23" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
