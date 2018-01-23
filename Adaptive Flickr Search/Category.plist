@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>categories</key>
+	<array>
+		<string>sunset</string>
+		<string>beach</string>
+		<string>water</string>
+		<string>sky</string>
+		<string>flower</string>
+		<string>nature</string>
+		<string>night</string>
+		<string>tree</string>
+		<string>art</string>
+		<string>snow</string>
+		<string>cat</string>
+		<string>dog</string>
+		<string>winter</string>
+		<string>landscape</string>
+		<string>summer</string>
+		<string>city</string>
+		<string>christmas</string>
+		<string>family</string>
+		<string>river</string>
+		<string>lake</string>
+		<string>bridge</string>
+		<string>portrait</string>
+		<string>spring</string>
+		<string>autumn</string>
+	</array>
+</dict>
+</plist>
