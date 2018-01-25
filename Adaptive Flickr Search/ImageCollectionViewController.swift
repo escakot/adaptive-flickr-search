@@ -9,8 +9,15 @@
 import UIKit
 
 class ImageCell: UICollectionViewCell {
+    
+    var photo: Photo?
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+
+    override func prepareForReuse() {
+        imageView.image = nil
+        titleLabel.text = ""
+    }
     
 }
 
@@ -22,13 +29,13 @@ class ImageCollectionViewController: UICollectionViewController {
             if let tag = tag {
                 networkManager.queryImages(with: tag, completionHandler: { (jsonData) in
                     if let photos = jsonData["photo"] as? [[String: AnyObject]] {
-                        self.flickrImages = photos.map{Photo.init(data: $0)}
+                        self.flickrPhotos = photos.map{Photo.init(data: $0)}
                     }
                 })
             }
         }
     }
-    var flickrImages = [Photo]() {
+    var flickrPhotos = [Photo]() {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView?.reloadData()
@@ -38,22 +45,29 @@ class ImageCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+//        if let layout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
+//            layout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
+//        }
     }
 
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return flickrImages.count
+        return max(flickrPhotos.count, 1)
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath)
         if let cell = cell as? ImageCell {
-            let imageData = flickrImages[indexPath.row]
-            cell.titleLabel.text = imageData.title
+            if flickrPhotos.count == 0 {
+                cell.titleLabel.text = "Test"
+                return cell
+            }
+            let photo = flickrPhotos[indexPath.row]
+            cell.titleLabel.text = photo.title
+            cell.photo = photo
             DispatchQueue.global(qos: .background).async {
-                if let url = imageData.url, let image = try? UIImage(data: Data(contentsOf: url)) {
+                if let url = photo.url, let image = try? UIImage(data: Data(contentsOf: url)) {
                     DispatchQueue.main.async {
                         cell.imageView.image = image
                     }
@@ -64,10 +78,21 @@ class ImageCollectionViewController: UICollectionViewController {
         // Configure the cell
         return cell
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dvc = segue.destination as? ImageDetailViewController,
+            let selectedIndexPath = collectionView?.indexPathsForSelectedItems?.first,
+            let cell = collectionView?.cellForItem(at: selectedIndexPath) as? ImageCell {
+            dvc.photo = cell.photo
+            dvc.flickrImage = cell.imageView.image
+        }
+    }
 }
 
 class ImageDetailViewController: UIViewController {
+    
+    var photo: Photo?
+    var flickrImage: UIImage?
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -75,6 +100,19 @@ class ImageDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        imageView.image = flickrImage
+        titleLabel.text = photo?.title
+
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.addTarget(self, action: #selector(handleTap(_:)))
+        view.addGestureRecognizer(tapGesture)
     }
     
+    @objc func handleTap(_ sender:UITapGestureRecognizer) {
+        if let navController = navigationController {
+            navController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
+    }
 }
