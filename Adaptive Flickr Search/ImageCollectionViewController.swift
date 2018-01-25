@@ -16,7 +16,25 @@ class ImageCell: UICollectionViewCell {
 
 class ImageCollectionViewController: UICollectionViewController {
 
-    var flickrImages = [Photo]()
+    let networkManager = NetworkManager()
+    var tag: String? {
+        didSet {
+            if let tag = tag {
+                networkManager.queryImages(with: tag, completionHandler: { (jsonData) in
+                    if let photos = jsonData["photo"] as? [[String: AnyObject]] {
+                        self.flickrImages = photos.map{Photo.init(data: $0)}
+                    }
+                })
+            }
+        }
+    }
+    var flickrImages = [Photo]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView?.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +52,6 @@ class ImageCollectionViewController: UICollectionViewController {
         if let cell = cell as? ImageCell {
             let imageData = flickrImages[indexPath.row]
             cell.titleLabel.text = imageData.title
-            print(imageData.url)
             DispatchQueue.global(qos: .background).async {
                 if let url = imageData.url, let image = try? UIImage(data: Data(contentsOf: url)) {
                     DispatchQueue.main.async {

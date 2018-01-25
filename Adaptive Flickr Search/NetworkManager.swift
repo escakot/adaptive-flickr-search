@@ -31,14 +31,14 @@ class NetworkManager: NSObject {
             if (error != nil)
             {
                 print (error!.localizedDescription)
-            }
-            
-            do {
-                if let photoData = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject], let photoArray = photoData["photos"] as? [String:AnyObject] {
-                    completionHandler(photoArray)
+            } else {
+                do {
+                    if let photoData = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject], let photoArray = photoData["photos"] as? [String:AnyObject] {
+                        completionHandler(photoArray)
+                    }
+                } catch {
+                    print(error.localizedDescription)
                 }
-            } catch {
-                print(error.localizedDescription)
             }
         })
         dataTask.resume()

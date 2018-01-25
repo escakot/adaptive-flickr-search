@@ -9,9 +9,8 @@
 import UIKit
 
 struct Constants {
-    //Override these variables with your own api_key and shared_secret if not working.
+    //Override these variables with your own api_key if not working.
     static let api_key = "aacf2aea79afde212979f5982da27eb8"
-    static let shared_secret = "1035058bb32d5347"
 }
 
 @UIApplicationMain
@@ -64,8 +63,23 @@ extension AppDelegate: UISplitViewControllerDelegate {
         if let navController = primaryViewController as? UINavigationController {
             return navController.topViewController
         }
-
+        
         return primaryViewController.storyboard?.instantiateViewController(withIdentifier: "NoCategorySelected")
+    }
+}
+
+extension UISplitViewController {
+    func currentVisibleDetail(_ sender: AnyObject?) -> UIViewController? {
+        if isCollapsed {
+            // If we're collapsed, we don't have a detail.
+            return nil
+        }
+        else {
+            // Otherwise, return our detail controller's contained photo (if any).
+            let controller = viewControllers.last
+            
+            return controller
+        }
     }
 }
 

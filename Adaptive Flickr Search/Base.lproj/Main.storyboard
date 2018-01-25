@@ -36,6 +36,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="tDg-Jh-EbX" kind="showDetail" id="fbZ-or-GfN"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -46,9 +49,6 @@
                     <navigationItem key="navigationItem" title="Flickr Categories" id="0Rb-NW-nEg">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="O1u-Z3-4IP"/>
                     </navigationItem>
-                    <connections>
-                        <segue destination="tDg-Jh-EbX" kind="show" identifier="DetailSegue" id="rvf-Vq-vEd"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MHj-WX-eUg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -101,7 +101,7 @@
                                 <connections>
                                     <outlet property="imageView" destination="Kxq-DL-adR" id="Ob9-4h-f2L"/>
                                     <outlet property="titleLabel" destination="4dW-Zv-w8I" id="ObD-i0-Fop"/>
-                                    <segue destination="e5z-t3-UDQ" kind="show" id="K6L-K4-T4Z"/>
+                                    <segue destination="e5z-t3-UDQ" kind="show" id="NMi-7i-BaD"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
