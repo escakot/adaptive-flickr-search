@@ -16,6 +16,13 @@ class FlickrTableViewController: UITableViewController {
         super.viewDidLoad()
 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
+            selectedIndexPaths.forEach{tableView.deselectRow(at: $0, animated: animated)}
+        }
+    }
 
     // MARK: - Table view data source
 

@@ -52,16 +52,21 @@ extension AppDelegate: UISplitViewControllerDelegate {
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         print(primaryViewController)
         print(secondaryViewController)
-        if secondaryViewController is ImageCollectionViewController || secondaryViewController is ImageDetailViewController{
-            return false
+        if let collectionVC = secondaryViewController as? ImageCollectionViewController {
+            if collectionVC.tag != nil {
+                return false
+            }
         }
-        
+
         return true
     }
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         
         if let navController = primaryViewController as? UINavigationController {
-            return navController.topViewController
+            
+            if let collectionView = navController.topViewController as? ImageCollectionViewController {
+                return collectionView
+            }
         }
         
         return primaryViewController.storyboard?.instantiateViewController(withIdentifier: "NoCategorySelected")
@@ -69,7 +74,7 @@ extension AppDelegate: UISplitViewControllerDelegate {
 }
 
 extension UISplitViewController {
-    func currentVisibleDetail(_ sender: AnyObject?) -> UIViewController? {
+    func currentVisibleDetail() -> UIViewController? {
         if isCollapsed {
             // If we're collapsed, we don't have a detail.
             return nil
