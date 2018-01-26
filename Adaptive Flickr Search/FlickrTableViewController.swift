@@ -10,7 +10,11 @@ import UIKit
 
 class FlickrTableViewController: UITableViewController {
     
-    var categories = [String]()
+    var categories = [String]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,4 +54,24 @@ class FlickrTableViewController: UITableViewController {
             dvc.tag = category
         }
     }
+    
+    @IBAction func addCategoryTapped(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "Add new search category", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addTextField { (textField) in
+            textField.font = UIFont.preferredFont(forTextStyle: .body)
+        }
+        let confirmButton = UIAlertAction(title: "Confirm", style: .default) { (alertAction) in
+            if let newCategory = alertController.textFields?.first?.text, !newCategory.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty  {
+                self.categories.append(newCategory)
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        [confirmButton, cancelButton].forEach{alertController.addAction($0)}
+        present(alertController, animated: true, completion: nil)
+    }
+
+    
 }
