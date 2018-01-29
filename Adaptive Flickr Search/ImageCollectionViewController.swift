@@ -45,32 +45,32 @@ class ImageCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        if let layout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
-        //            layout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
-        //        }
+        if let layout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
+        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return max(flickrPhotos.count, 5)
+        return flickrPhotos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath)
         if let cell = cell as? ImageCell {
-            if flickrPhotos.count == 0 {
-                cell.titleLabel.text = "Sample Text due to no internet connection"
-                cell.imageView.image = UIImage(named: "sample-text")
-            } else {
-                let photo = flickrPhotos[indexPath.row]
-                cell.titleLabel.text = photo.title
-                cell.photo = photo
-                DispatchQueue.global(qos: .background).async {
-                    if let url = photo.url, let image = try? UIImage(data: Data(contentsOf: url)) {
-                        DispatchQueue.main.async {
-                            cell.imageView.image = image
-                        }
+            let photo = flickrPhotos[indexPath.row]
+            cell.titleLabel.text = photo.title
+            cell.photo = photo
+            DispatchQueue.global(qos: .background).async {
+                if let url = photo.url, let image = try? UIImage(data: Data(contentsOf: url)) {
+                    DispatchQueue.main.async {
+                        cell.imageView.image = image
                     }
                 }
             }
@@ -97,6 +97,19 @@ class ImageDetailViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var imageBottomConstraint: NSLayoutConstraint!
+    
+    var useAccessibilityConstraints = false {
+        didSet {
+            if useAccessibilityConstraints || traitCollection.horizontalSizeClass == .compact {
+                stackView.axis = .vertical
+            } else {
+                stackView.axis = .horizontal
+            }
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,6 +120,10 @@ class ImageDetailViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer()
         tapGesture.addTarget(self, action: #selector(handleTap(_:)))
         view.addGestureRecognizer(tapGesture)
+    }
+
+    override func viewWillLayoutSubviews() {
+        useAccessibilityConstraints = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
     }
     
     @objc func handleTap(_ sender:UITapGestureRecognizer) {

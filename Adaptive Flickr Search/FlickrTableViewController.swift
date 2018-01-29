@@ -18,11 +18,11 @@ class FlickrTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
         if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
             selectedIndexPaths.forEach{tableView.deselectRow(at: $0, animated: animated)}
         }
@@ -41,10 +41,6 @@ class FlickrTableViewController: UITableViewController {
         
         // Configure the cell...
         return cell
-    }
-    
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
